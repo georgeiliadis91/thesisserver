@@ -1,14 +1,27 @@
-GET http://geoili.me:3000/subscribers
+GET http://geoili.me:3000/users
 
 
 ###
 
-POST http://geoili.me:3000/subscribers
+POST http://geoili.me:3000/users
 Content-Type: application/json
 
 {
-	"name":"George2",
-	"subscribedToChannel":"Something2"
+	"name":"George",
+	"email":"test2@test.com"
+}
+
+###
+GET http://geoili.me:3000/quizes
+
+
+###
+
+POST http://geoili.me:3000/quizes
+Content-Type: application/json
+
+{
+	"name":"Quiz 1"
 }
 
 ###
