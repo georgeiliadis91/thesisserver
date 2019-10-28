@@ -21,7 +21,14 @@ router.get('/:id', getQuiz, (req, res) => {
 router.post('/', async (req, res) => {
 	const quiz = new Quiz({
 		name: req.body.name,
-
+		questions: [{
+			questionTitle: req.body.questions[0],
+			answerA: req.body.questions[1],
+			answerB: req.body.questions[2],
+			answerC: req.body.questions[3],
+			answerD: req.body.questions[4],
+			correctAnswer: req.body.questions[5]
+		}]
 	})
 	try {
 		const newQuiz = await quiz.save()

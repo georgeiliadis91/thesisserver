@@ -21,7 +21,25 @@ POST http://geoili.me:3000/quizes
 Content-Type: application/json
 
 {
-	"name":"Quiz 1"
+	"name":"Quiz 6",
+	"questions":[
+		{
+		"questionTitle" : "Question 1",
+		"answerA": "A",
+		"answerB": "B",
+		"answerC": "C",
+		"answerD": "D",
+		"correctAnswer":1
+	},
+		{
+		"questionTitle" : "Question 2",
+		"answerA": "A",
+		"answerB": "B",
+		"answerC": "C",
+		"answerD": "D",
+		"correctAnswer":1
+	}
+	]
 }
 
 ###
