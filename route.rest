@@ -7,8 +7,8 @@ POST http://geoili.me:3000/users
 Content-Type: application/json
 
 {
-	"name":"George",
-	"email":"test2@test.com"
+	"name":"Helna",
+	"email":"vathis@vathis.com"
 }
 
 ###
@@ -21,10 +21,26 @@ POST http://geoili.me:3000/quizes
 Content-Type: application/json
 
 {
-	"name":"Quiz 6",
+	"name":"Quiz 8",
 	"questions":[
 		{
 		"questionTitle" : "Question 1",
+		"answerA": "A",
+		"answerB": "B",
+		"answerC": "C",
+		"answerD": "D",
+		"correctAnswer":1
+	},
+		{
+		"questionTitle" : "Question 2",
+		"answerA": "A",
+		"answerB": "B",
+		"answerC": "C",
+		"answerD": "D",
+		"correctAnswer":1
+	},
+		{
+		"questionTitle" : "Question 4",
 		"answerA": "A",
 		"answerB": "B",
 		"answerC": "C",

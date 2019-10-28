@@ -19,20 +19,14 @@ router.get('/:id', getQuiz, (req, res) => {
 
 // Creating one
 router.post('/', async (req, res) => {
-	const quiz = new Quiz({
-		name: req.body.name,
-		questions: [{
-			questionTitle: req.body.questions[0],
-			answerA: req.body.questions[1],
-			answerB: req.body.questions[2],
-			answerC: req.body.questions[3],
-			answerD: req.body.questions[4],
-			correctAnswer: req.body.questions[5]
-		}]
-	})
+	// let data = JSON.stringify(req.body)
+	const quiz = new Quiz(req.body)
+
 	try {
 		const newQuiz = await quiz.save()
 		res.status(201).json(newQuiz)
+		// res.json(req.body)
+
 	} catch (err) {
 		res.status(400).json({ message: err.message })
 	}
