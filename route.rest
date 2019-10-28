@@ -1,0 +1,14 @@
+GET http://geoili.me:3000/subscribers
+
+
+###
+
+POST http://geoili.me:3000/subscribers
+Content-Type: application/json
+
+{
+	"name":"George2",
+	"subscribedToChannel":"Something2"
+}
+
+###
