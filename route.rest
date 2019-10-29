@@ -2,13 +2,17 @@ GET http://geoili.me:3000/users
 
 
 ###
+GET http://geoili.me:3000/users/5db6af244a0a8f701431fdf1
+
+
+###
 
 POST http://geoili.me:3000/users
 Content-Type: application/json
 
 {
-	"name":"Helna",
-	"email":"vathis@vathis.com"
+	"name":"George",
+	"email":"test@test.com"
 }
 
 ###
