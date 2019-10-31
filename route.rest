@@ -1,13 +1,13 @@
-GET http://geoili.me:3000/users
+GET http://geoili.me:4000/users
 
 
 ###
-GET http://geoili.me:3000/users/5db6af244a0a8f701431fdf1
+GET http://geoili.me:4000/users/5db6af244a0a8f701431fdf1
 
 
 ###
 
-POST http://geoili.me:3000/users
+POST http://geoili.me:4000/users
 Content-Type: application/json
 
 {
@@ -16,12 +16,16 @@ Content-Type: application/json
 }
 
 ###
-GET http://geoili.me:3000/quizes
+GET http://geoili.me:4000/quizes
+
+
+###
+DELETE http://geoili.me:4000/quizes/5db6b7a2a94c3279557577b9
 
 
 ###
 
-POST http://geoili.me:3000/quizes
+POST http://geoili.me:4000/quizes
 Content-Type: application/json
 
 {
