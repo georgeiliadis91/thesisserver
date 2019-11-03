@@ -10,7 +10,10 @@ const db = mongoose.connection
 
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to Database'))
-// app.use(cors());
+// app.use(cors({
+// 	origin: 'process.env.ALLOWED_HOST'
+// }));
+app.use(cors());
 app.use(express.json())
 
 const quizRouter = require('./routes/quizes')
@@ -19,9 +22,9 @@ app.use('/quizes', quizRouter)
 const usersRouter = require('./routes/users')
 app.use('/users', usersRouter)
 
-const port = process.env.PORT || 3030;
-app.listen(port, () => console.log(`Server started, listening to port ${port}`));
+// const port = process.env.PORT || 3030;
+// app.listen(port, () => console.log(`Server started, listening to port ${port}`));
 
 // This is for productions should only allow localhost calls.
-// const port = process.env.PORT || 3030;
-// app.listen(port, 'localhost', () => console.log(`Server started, listening to port ${port}`));
+const port = process.env.PORT || 3030;
+app.listen(port, () => console.log(`Server started, listening to port ${port}`));
