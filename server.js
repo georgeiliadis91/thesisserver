@@ -20,7 +20,7 @@ const usersRouter = require('./routes/users')
 app.use('/users', usersRouter)
 
 const port = process.env.PORT || 3030;
-app.listen(port, 'localhost', () => console.log(`Server started, listening to port ${port}`));
+app.listen(port, () => console.log(`Server started, listening to port ${port}`));
 
 // This is for productions should only allow localhost calls.
 // const port = process.env.PORT || 3030;
