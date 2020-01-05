@@ -37,6 +37,11 @@ router.patch('/:id', getQuiz, async (req, res) => {
 	if (req.body.name != null) {
 		res.quiz.name = req.body.name
 	}
+	if (req.body.questions != null) {
+		res.quiz.questions = req.body.questions
+	}
+
+
 
 	try {
 		const updatedQuiz = await res.quiz.save()
