@@ -61,6 +61,35 @@ router.delete('/:id', getQuiz, async (req, res) => {
 	}
 })
 
+//submitting quiz answers and calculating scores
+
+router.post('/submit/:id', getQuiz, async (req, res) => {
+	try {
+		let correct;
+		if (req.body.answers != null) {
+			let answers = req.body.answers;
+			answers.forEach((index, answer) => {
+				if (
+					res.quiz.questions[index].correctAnswer == answers[index]
+				) {
+					correct++
+				}
+				// console.log('submitted')
+			});
+		}
+		let score = correct / res.quiz.questions.length;
+		res.json(score);
+	}
+
+	catch (error) {
+		res.status(500).json({ message: err.message })
+	}
+})
+
+
+
+
+
 async function getQuiz(req, res, next) {
 	let quiz
 	try {
