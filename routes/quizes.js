@@ -64,25 +64,33 @@ router.delete('/:id', getQuiz, async (req, res) => {
 //submitting quiz answers and calculating scores
 
 router.post('/submit/:id', getQuiz, async (req, res) => {
-	try {
-		let correct;
-		if (req.body.answers != null) {
-			let answers = req.body.answers;
-			answers.forEach((index, answer) => {
-				if (
-					res.quiz.questions[index].correctAnswer == answers[index]
-				) {
-					correct++
-				}
-				// console.log('submitted')
-			});
-		}
-		let score = correct / res.quiz.questions.length;
-		res.json(score);
-	}
+	if (req.body != null) {
 
-	catch (error) {
-		res.status(500).json({ message: err.message })
+		console.log(req.body);
+		try {
+			var correct = 0;
+			console.log('===============');
+			// console.log(res.quiz);
+
+			var answers = req.body;
+			req.body.forEach((answer, index) => {
+				// console.log('index:' + index);
+				// console.log('answer:' + answer);
+				// console.log('correctAnswer:' + res.quiz.questions[index].correctAnswer);
+				if (answer == res.quiz.questions[index].correctAnswer) {
+					correct++;
+				}
+			});
+
+			let score = (correct / res.quiz.questions.length).toFixed(2) * 100;
+
+			// console.log(score);
+			res.json({ message: 'You scored: ' + score + ' %' });
+		} catch (error) {
+			res.status(500).json({ message: error.message });
+		}
+	} else {
+		res.status(500).json({ message: 'No data has submmited' })
 	}
 })
 
@@ -102,6 +110,7 @@ async function getQuiz(req, res, next) {
 	}
 
 	res.quiz = quiz
+	// console.log(res.quiz);
 	next()
 }
 
