@@ -13,9 +13,14 @@ const scoreSchema = new mongoose.Schema({
 		default: null
 	},
 	attempts: {
-		type: String,
+		type: Number,
 		required: true,
 		default: 3
+	},
+	createdAt: {
+		type: Date,
+		required: true,
+		default: Date.now
 	}
 })
 
@@ -33,7 +38,7 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	score:[scoreSchema],
+	score: [scoreSchema],
 	createdAt: {
 		type: Date,
 		required: true,
