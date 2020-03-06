@@ -1,5 +1,25 @@
 const mongoose = require('mongoose')
 
+
+const scoreSchema = new mongoose.Schema({
+	id: {
+		type: String,
+		required: true,
+		default: null
+	},
+	bestScore: {
+		type: Number,
+		required: true,
+		default: null
+	},
+	attempts: {
+		type: String,
+		required: true,
+		default: 3
+	}
+})
+
+
 const userSchema = new mongoose.Schema({
 	firebase_id: {
 		type: String,
@@ -13,6 +33,7 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	score:[scoreSchema],
 	createdAt: {
 		type: Date,
 		required: true,
