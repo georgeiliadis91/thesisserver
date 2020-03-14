@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Quiz = require('../models/quiz.model');
 const User = require('../models/user.model');
+const Result = require('../models/result.model');
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -69,8 +70,9 @@ router.post('/submit/:id', getQuiz, async (req, res) => {
 			// console.log('===============');
 			// console.log(res.quiz);
 
-			var answers = req.body;
-			req.body.answers.forEach((answer, index) => {
+			// var answers = req.body;
+			let { firebase_id, quiz_id, answers } = req.body;
+			answers.forEach((answer, index) => {
 				// console.log('index:' + index);
 				// console.log('answer:' + answer);
 				// console.log('correctAnswer:' + res.quiz.questions[index].correctAnswer);
@@ -81,39 +83,29 @@ router.post('/submit/:id', getQuiz, async (req, res) => {
 
 			let score = (correct / res.quiz.questions.length).toFixed(2) * 100;
 
-			user = await User.find({ firebase_id: req.body.userdata.fid });
+			user = await User.find({ firebase_id: firebase_id });
+			console.log('user', user);
+			quiz = await Quiz.find({ _id: quiz_id });
+			console.log('quiz', quiz);
+
+			result = await Result.find({
+				quiz_id: quiz_id,
+				firebase_id: firebase_id
+			});
+			console.log('result', result);
+			console.log('123');
 
 			if (user == null) {
 				return res.status(404).json({ message: 'Cannot find user' });
+			} else if (quiz == null) {
+				console.log('456');
+				return res.status(404).json({ message: 'Cannot find quiz' });
+				console.log('789');
+			} else if (result) {
+				console.log('666');
+				const result = await result.save();
 			}
 
-			console.log(user);
-			userId = user[0]._id;
-
-			result = await User.find({ _id: userId });
-			console.log('result:' + result);
-
-			if (result) {
-				// Check if use has test on him, if yes compare bestScores and keep best => reduce attempts.
-				// if test does not exist, set bestScores and Attempts.
-				// result.score.forEach(quizscore=>{
-				// 	if(quizscore.quiz_id==quiz.id){
-				// 		if(quizscore.bestScore>score){
-				// 			quizscore.attempts--
-				// 		}else{
-				// 		}
-				// 	}
-				// });
-
-				const data = {
-					quiz_id: req.params.id,
-					bestScore: score
-				};
-			} else {
-				res.status(500).json({ message: 'User Error' });
-			}
-
-			console.log('qweqwe');
 			// console.log(score);
 			res.json({ message: 'You scored: ' + score + ' %' });
 		} catch (error) {

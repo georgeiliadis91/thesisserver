@@ -1,32 +1,38 @@
-require('dotenv').config()
+require('dotenv').config();
 
-const express = require('express')
+const express = require('express');
 const cors = require('cors');
-const app = express()
-const mongoose = require('mongoose')
+const app = express();
+const mongoose = require('mongoose');
 
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
+mongoose.connect(process.env.DATABASE_URL, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true
+});
+const db = mongoose.connection;
 
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('Connected to Database'))
+db.on('error', error => console.error(error));
+db.once('open', () => console.log('Connected to Database'));
 // app.use(cors({
 // 	origin: 'process.env.ALLOWED_HOST'
 // }));
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
-const quizRouter = require('./routes/quizes')
-app.use('/quizes', quizRouter)
+const quizRouter = require('./routes/quizes');
+app.use('/quizes', quizRouter);
 
-const usersRouter = require('./routes/users')
-app.use('/users', usersRouter)
+const usersRouter = require('./routes/users');
+app.use('/users', usersRouter);
 
-
+const resultsRouter = require('./routes/results');
+app.use('/results', resultsRouter);
 
 // const port = process.env.PORT || 3030;
 // app.listen(port, () => console.log(`Server started, listening to port ${port}`));
 
 // This is for productions should only allow localhost calls.
 const port = process.env.PORT || 3030;
-app.listen(port, () => console.log(`Server started, listening to port ${port}`));
+app.listen(port, () =>
+	console.log(`Server started, listening to port ${port}`)
+);
