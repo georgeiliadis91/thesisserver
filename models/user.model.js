@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 
 const scoreSchema = new mongoose.Schema({
-	id: {
+	quiz_id: {
 		type: String,
 		required: true,
 		default: null
@@ -14,16 +14,10 @@ const scoreSchema = new mongoose.Schema({
 	},
 	attempts: {
 		type: Number,
-		required: true,
-		default: 3
-	},
-	createdAt: {
-		type: Date,
-		required: true,
-		default: Date.now
+		required: false,
+		default: 2
 	}
 })
-
 
 const userSchema = new mongoose.Schema({
 	firebase_id: {
@@ -38,7 +32,7 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	score: [scoreSchema],
+	scores: [scoreSchema],
 	createdAt: {
 		type: Date,
 		required: true,
