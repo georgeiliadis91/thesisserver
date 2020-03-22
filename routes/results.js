@@ -6,15 +6,53 @@ const Result = require('../models/result.model');
 router.get('/', async (req, res) => {
 	try {
 		const results = await Result.find();
-		res.json(results);
+		return res.json(results);
 	} catch (err) {
-		res.status(500).json({ message: err.message });
+		return res.status(500).json({ message: err.message });
 	}
 });
 
 // Getting One
 router.get('/:id', getResult, (req, res) => {
-	res.json(res.result);
+	return res.json(res.result);
+});
+
+router.delete('/:id', getResult, async (req, res) => {
+	try {
+		await res.result.remove();
+		return res.json({ message: 'Deleted Result' });
+	} catch (err) {
+		return res.status(500).json({ message: err.message });
+	}
+});
+
+//get results given user id sum score.
+
+router.get('/totalscore/:fid', async (req, res) => {
+	try {
+		const results = await Result.find({ firebase_id: req.params.fid });
+		let total = 0;
+		results.forEach(result => {
+			total = total + result.bestScore;
+		});
+		const average = total / results.length;
+
+		return res.json({ totalScore: total, average: average });
+	} catch (err) {
+		return res.status(500).json({ message: err.message });
+	}
+});
+
+//get individual results for scores of user
+
+router.get('/allscores/:fid', async (req, res) => {
+	try {
+		const results = await Result.find({ firebase_id: req.params.fid });
+
+		return res.json({ results: results });
+	} catch (err) {
+		return res.status(500).json({ message: err.message });
+	}
 });
 
 async function getResult(req, res, next) {

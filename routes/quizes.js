@@ -8,7 +8,7 @@ const Result = require('../models/result.model');
 router.get('/', async (req, res) => {
 	try {
 		const quizes = await Quiz.find();
-		res.json(quizes);
+		return res.json(quizes);
 	} catch (err) {
 		res.status(500).json({ message: err.message });
 	}
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 
 // Getting One
 router.get('/:id', getQuiz, (req, res) => {
-	res.json(res.quiz);
+	return res.json(res.quiz);
 });
 
 // Creating one
@@ -44,7 +44,7 @@ router.patch('/:id', getQuiz, async (req, res) => {
 
 	try {
 		const updatedQuiz = await res.quiz.save();
-		res.json(updatedQuiz);
+		return res.json(updatedQuiz);
 	} catch (err) {
 		res.status(400).json({ message: err.message });
 	}
@@ -54,7 +54,7 @@ router.patch('/:id', getQuiz, async (req, res) => {
 router.delete('/:id', getQuiz, async (req, res) => {
 	try {
 		await res.quiz.remove();
-		res.json({ message: 'Deleted Quiz' });
+		return res.json({ message: 'Deleted Quiz' });
 	} catch (err) {
 		res.status(500).json({ message: err.message });
 	}
@@ -64,18 +64,13 @@ router.delete('/:id', getQuiz, async (req, res) => {
 
 router.post('/submit/:id', getQuiz, async (req, res) => {
 	if (req.body != null) {
-		console.log(req.body);
+		// console.log(req.body);
 		try {
 			var correct = 0;
-			// console.log('===============');
-			// console.log(res.quiz);
 
-			// var answers = req.body;
 			let { firebase_id, quiz_id, answers } = req.body;
+
 			answers.forEach((answer, index) => {
-				// console.log('index:' + index);
-				// console.log('answer:' + answer);
-				// console.log('correctAnswer:' + res.quiz.questions[index].correctAnswer);
 				if (answer == res.quiz.questions[index].correctAnswer) {
 					correct++;
 				}
@@ -84,30 +79,39 @@ router.post('/submit/:id', getQuiz, async (req, res) => {
 			let score = (correct / res.quiz.questions.length).toFixed(2) * 100;
 
 			user = await User.find({ firebase_id: firebase_id });
-			console.log('user', user);
 			quiz = await Quiz.find({ _id: quiz_id });
-			console.log('quiz', quiz);
 
-			result = await Result.find({
+			let result_exist = await Result.findOne({
 				quiz_id: quiz_id,
 				firebase_id: firebase_id
 			});
-			console.log('result', result);
-			console.log('123');
 
 			if (user == null) {
 				return res.status(404).json({ message: 'Cannot find user' });
 			} else if (quiz == null) {
-				console.log('456');
 				return res.status(404).json({ message: 'Cannot find quiz' });
-				console.log('789');
-			} else if (result) {
-				console.log('666');
-				const result = await result.save();
+			} else if (result_exist == null) {
+				const result = new Result({
+					quiz_id: quiz_id,
+					firebase_id: firebase_id,
+					bestScore: score
+				});
+
+				await result.save();
+			} else {
+				if (result_exist.attempts == 0) {
+					return res.json({
+						status: false,
+						message: 'You cannot take the quiz more times.'
+					});
+				} else {
+					result_exist.bestScore = score;
+					result_exist.attempts--;
+					await result_exist.save();
+				}
 			}
 
-			// console.log(score);
-			res.json({ message: 'You scored: ' + score + ' %' });
+			return res.json({ status: true, message: 'You scored: ' + score + ' %' });
 		} catch (error) {
 			res.status(500).json({ message: error.message });
 		}
@@ -128,7 +132,6 @@ async function getQuiz(req, res, next) {
 	}
 
 	res.quiz = quiz;
-	// console.log(res.quiz);
 	next();
 }
 
