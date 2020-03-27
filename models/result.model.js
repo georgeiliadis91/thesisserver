@@ -10,6 +10,11 @@ const resultSchema = new mongoose.Schema({
 		required: true,
 		default: null
 	},
+	quiz_name: {
+		type: String,
+		required: true,
+		default: null
+	},
 	bestScore: {
 		type: Number,
 		required: true,

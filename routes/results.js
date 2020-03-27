@@ -17,6 +17,7 @@ router.get('/:id', getResult, (req, res) => {
 	return res.json(res.result);
 });
 
+
 router.delete('/:id', getResult, async (req, res) => {
 	try {
 		await res.result.remove();
@@ -49,7 +50,7 @@ router.get('/allscores/:fid', async (req, res) => {
 	try {
 		const results = await Result.find({ firebase_id: req.params.fid });
 
-		return res.json({ results: results });
+		return res.json(results);
 	} catch (err) {
 		return res.status(500).json({ message: err.message });
 	}

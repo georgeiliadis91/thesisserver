@@ -38,6 +38,7 @@ router.patch('/:id', getQuiz, async (req, res) => {
 	if (req.body.name != null) {
 		res.quiz.name = req.body.name;
 	}
+
 	if (req.body.questions != null) {
 		res.quiz.questions = req.body.questions;
 	}
@@ -53,7 +54,11 @@ router.patch('/:id', getQuiz, async (req, res) => {
 // Deleting One
 router.delete('/:id', getQuiz, async (req, res) => {
 	try {
-		await res.quiz.remove();
+		await res.quiz.deleteOne();
+
+		await Result.deleteMany({ quiz_id: req.params.id });
+
+
 		return res.json({ message: 'Deleted Quiz' });
 	} catch (err) {
 		res.status(500).json({ message: err.message });
@@ -78,8 +83,9 @@ router.post('/submit/:id', getQuiz, async (req, res) => {
 
 			let score = (correct / res.quiz.questions.length).toFixed(2) * 100;
 
-			user = await User.find({ firebase_id: firebase_id });
-			quiz = await Quiz.find({ _id: quiz_id });
+			user = await User.findOne({ firebase_id: firebase_id });
+			quiz = await Quiz.findOne({ _id: quiz_id });
+			console.log('quiz', quiz);
 
 			let result_exist = await Result.findOne({
 				quiz_id: quiz_id,
@@ -94,7 +100,8 @@ router.post('/submit/:id', getQuiz, async (req, res) => {
 				const result = new Result({
 					quiz_id: quiz_id,
 					firebase_id: firebase_id,
-					bestScore: score
+					bestScore: score,
+					quiz_name: quiz.name
 				});
 
 				await result.save();

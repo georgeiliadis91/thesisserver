@@ -1,6 +1,4 @@
-const mongoose = require('mongoose')
-
-
+const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
 	questionTitle: {
@@ -38,7 +36,7 @@ const questionSchema = new mongoose.Schema({
 		required: true,
 		default: Date.now
 	}
-})
+});
 
 const quizSchema = new mongoose.Schema({
 	name: {
@@ -51,6 +49,6 @@ const quizSchema = new mongoose.Schema({
 		required: true,
 		default: Date.now
 	}
-})
+});
 
-module.exports = mongoose.model('Quiz', quizSchema)
+module.exports = mongoose.model('Quiz', quizSchema);
