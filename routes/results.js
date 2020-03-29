@@ -1,6 +1,38 @@
 const express = require('express');
 const router = express.Router();
 const Result = require('../models/result.model');
+const User = require('../models/user.model');
+
+//Return total score for each user.
+router.get('/rankings/', async (req, res) => {
+	try {
+		let userData = [];
+		const users = await User.find();
+
+		for (let index = 0; index < users.length; index++) {
+			const results = await Result.find({
+				firebase_id: users[index].firebase_id
+			});
+
+			let total = 0;
+			results.forEach(result => {
+				total = total + result.bestScore;
+			});
+			const average = total / results.length;
+
+			await userData.push({
+				name: users[index].name,
+				firebase_id: users[index].firebase_id,
+				total: total,
+				average: average
+			});
+		}
+
+		return res.json(userData);
+	} catch (err) {
+		return res.status(500).json({ message: err.message });
+	}
+});
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -16,7 +48,6 @@ router.get('/', async (req, res) => {
 router.get('/:id', getResult, (req, res) => {
 	return res.json(res.result);
 });
-
 
 router.delete('/:id', getResult, async (req, res) => {
 	try {

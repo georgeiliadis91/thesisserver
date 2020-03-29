@@ -22,6 +22,10 @@ router.get('/:id', getQuiz, (req, res) => {
 // Creating one
 router.post('/', async (req, res) => {
 	// let data = JSON.stringify(req.body)
+	// ====================todo=========================
+
+	//it should be FIND OR CREATE HERE!
+
 	const quiz = new Quiz(req.body);
 
 	try {
@@ -57,7 +61,6 @@ router.delete('/:id', getQuiz, async (req, res) => {
 		await res.quiz.deleteOne();
 
 		await Result.deleteMany({ quiz_id: req.params.id });
-
 
 		return res.json({ message: 'Deleted Quiz' });
 	} catch (err) {

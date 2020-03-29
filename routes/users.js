@@ -12,11 +12,6 @@ router.get('/', async (req, res) => {
 	}
 });
 
-// Getting One
-router.get('/:id', getUser, (req, res) => {
-	return res.json(res.user);
-});
-
 // Creating one
 router.post('/', async (req, res) => {
 	const user = new User({
@@ -24,12 +19,18 @@ router.post('/', async (req, res) => {
 		email: req.body.email,
 		firebase_id: req.body.firebase_id
 	});
+
 	try {
 		const newUser = await user.save();
 		return res.status(201).json(newUser);
 	} catch (err) {
 		return res.status(400).json({ message: err.message });
 	}
+});
+
+// Getting One
+router.get('/:id', getUser, (req, res) => {
+	return res.json(res.user);
 });
 
 // Updating One
@@ -53,14 +54,12 @@ router.patch('/:id', getUser, async (req, res) => {
 
 // Deleting One
 router.delete('/:id', getUser, async (req, res) => {
-
 	try {
 		await res.user.remove();
 		return res.json({ message: 'Deleted User' });
 	} catch (err) {
 		return res.status(500).json({ message: err.message });
 	}
-	
 });
 
 async function getUser(req, res, next) {
